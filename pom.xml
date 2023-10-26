@@ -9,14 +9,14 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>ru.practicum</groupId>
-	<artifactId>shareit</artifactId>
+	<groupId>com.progect</groupId>
+	<artifactId>rentAndShareApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>ShareIt</name>
+	<name>RentAndShareApp</name>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 
 	<dependencies>

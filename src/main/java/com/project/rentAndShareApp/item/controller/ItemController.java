@@ -1,9 +1,9 @@
-package com.project.rentAndShareApp.user;
+package com.project.rentAndShareApp.item.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/users")
-public class UserController {
+@RequestMapping("/items")
+public class ItemController {
 }
