@@ -4,9 +4,14 @@ import com.project.rentAndShareApp.request.entity.ItemRequest;
 import com.project.rentAndShareApp.user.entity.User;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Data
 public class Item {
     private Long id;
+
+    @NotBlank
     private String name;
     private String description;
     private Boolean isAvailable;
