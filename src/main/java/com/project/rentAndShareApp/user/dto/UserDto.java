@@ -4,14 +4,14 @@ import lombok.Value;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Value
 public class UserDto {
     Long id;
-
-    @NotBlank
     String name;
 
-    @Email
+    @NotNull(message = "поле email не может быть null")
+    @Email(message = "некорректный email")
     String email;
 }

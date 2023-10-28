@@ -11,22 +11,26 @@ import javax.validation.constraints.NotNull;
 public class Item {
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "поле name не может быть пустым")
     private String name;
+
+    @NotBlank(message = "поле description не может быть пустым")
     private String description;
-    private Boolean isAvailable;
+
+    @NotNull(message = "поле available не может быть null")
+    private Boolean available;
+
     private User owner;
     private ItemRequest itemRequest;
 
     public Item() {
-
     }
 
-    public Item(Long id, String name, String description, Boolean isAvailable, User owner, ItemRequest itemRequest) {
+    public Item(Long id, String name, String description, Boolean available, User owner, ItemRequest itemRequest) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.isAvailable = isAvailable;
+        this.available = available;
         this.owner = owner;
         this.itemRequest = itemRequest;
     }

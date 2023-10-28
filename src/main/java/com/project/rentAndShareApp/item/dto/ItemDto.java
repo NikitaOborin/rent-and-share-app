@@ -11,11 +11,14 @@ import javax.validation.constraints.NotNull;
 public class ItemDto {
     Long id;
 
-    @NotBlank
+    @NotBlank(message = "поле name не может быть пустым")
     String name;
 
+    @NotBlank(message = "поле description не может быть пустым")
     String description;
-    Boolean isAvailable;
+
+    @NotNull(message = "поле available не может быть null")
+    Boolean available;
     User owner;
     ItemRequest itemRequest;
 }

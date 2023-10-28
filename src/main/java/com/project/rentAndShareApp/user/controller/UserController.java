@@ -41,16 +41,17 @@ public class UserController {
 
     @PostMapping()
     public UserDto addUser(@RequestBody @Valid UserDto userDto) {
-        log.info("UserController: addUser(): start with userDtoId = {}", userDto.getId());
+        log.info("UserController: addUser(): start with userDtoId = '{}'", userDto);
         User addedUser = userService.addUser(userMapper.toUser(userDto));
 
         return userMapper.toUserDto(addedUser);
     }
 
-    @PatchMapping()
-    public UserDto updateUser(@RequestBody UserDto userDto) {
-        log.info("UserController: updateUser(): start with userDtoId = {}", userDto.getId());
-        User updatedUser = userService.updateUser(userMapper.toUser(userDto));
+    @PatchMapping("/{userId}")
+    public UserDto updateUser(@PathVariable Long userId,
+                              @RequestBody UserDto userDto) {
+        log.info("UserController: updateUser(): start with userDtoId = {}", userId);
+        User updatedUser = userService.updateUser(userId, userMapper.toUser(userDto));
 
         return userMapper.toUserDto(updatedUser);
     }
