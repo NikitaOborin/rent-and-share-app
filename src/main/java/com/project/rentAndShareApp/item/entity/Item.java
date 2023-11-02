@@ -4,11 +4,17 @@ import com.project.rentAndShareApp.request.entity.ItemRequest;
 import com.project.rentAndShareApp.user.entity.User;
 import lombok.Data;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
+@Entity
+@Table(name = "item")
 public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "item_id")
     private Long id;
 
     @NotBlank(message = "поле name не может быть пустым")
@@ -20,7 +26,12 @@ public class Item {
     @NotNull(message = "поле available не может быть null")
     private Boolean available;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User owner;
+
+    @ManyToOne
+    @JoinColumn(name = "request_id")
     private ItemRequest itemRequest;
 
     public Item() {
