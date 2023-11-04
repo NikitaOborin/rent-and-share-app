@@ -41,7 +41,7 @@ public class UserController {
 
     @PostMapping()
     public UserDto addUser(@RequestBody @Valid UserDto userDto) {
-        log.info("UserController: addUser(): start with userDtoId = '{}'", userDto);
+        log.info("UserController: addUser(): start with userDtoId='{}'", userDto);
         User addedUser = userService.addUser(userMapper.toUser(userDto));
 
         return userMapper.toUserDto(addedUser);
@@ -50,7 +50,7 @@ public class UserController {
     @PatchMapping("/{userId}")
     public UserDto updateUser(@PathVariable Long userId,
                               @RequestBody UserDto userDto) {
-        log.info("UserController: updateUser(): start with userDtoId = {}", userId);
+        log.info("UserController: updateUser(): start with userDtoId={}", userId);
         User updatedUser = userService.updateUser(userId, userMapper.toUser(userDto));
 
         return userMapper.toUserDto(updatedUser);
@@ -58,7 +58,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable("id") Long userId) {
-        log.info("UserController: getUserById(): start with userId = {}", userId);
+        log.info("UserController: getUserById(): start with userId={}", userId);
         User user = userService.getUserById(userId);
 
         return userMapper.toUserDto(user);
@@ -66,7 +66,7 @@ public class UserController {
 
     @DeleteMapping("{id}")
     public void deleteUserById(@PathVariable("id") Long userId) {
-        log.info("UserController: deleteUserById(): start with userId = {}", userId);
+        log.info("UserController: deleteUserById(): start with userId={}", userId);
         userService.deleteUserById(userId);
     }
 }

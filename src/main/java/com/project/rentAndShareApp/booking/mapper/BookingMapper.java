@@ -2,7 +2,9 @@ package com.project.rentAndShareApp.booking.mapper;
 
 import com.project.rentAndShareApp.booking.dto.BookingDto;
 import com.project.rentAndShareApp.booking.entity.Booking;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BookingMapper {
     public BookingDto toBookingDto(Booking booking) {
         return new BookingDto(

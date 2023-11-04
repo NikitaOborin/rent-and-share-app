@@ -1,6 +1,7 @@
 package com.project.rentAndShareApp.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -37,5 +38,11 @@ public class CustomExceptionHandler {
     public ResponseEntity<String> handle(MissingRequestHeaderException exception) {
         log.error("MissingRequestHeaderException: " + exception.getMessage());
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handle(UserEmailAlreadyExistException exception) {
+        log.error("UserEmailAlreadyExistException: " + exception.getMessage());
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
     }
 }

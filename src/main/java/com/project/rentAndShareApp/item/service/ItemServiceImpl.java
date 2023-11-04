@@ -25,36 +25,26 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getListItemsForUserId(Long userId) {
-        return itemRepository.getListItemsForUserId(userId);
+        return null;
     }
 
     @Override
     public Item addItem(Item item, Long userId) {
-        User owner = userRepository.getUserById(userId);
-
-        item.setOwner(owner);
-
-        return itemRepository.addItem(item);
+        return null;
     }
 
     @Override
     public Item updateItem(Item item, Long itemId, Long userId) {
-        return itemRepository.updateItem(item, itemId, userRepository.getUserById(userId));
+        return null;
     }
 
     @Override
     public Item getItemById(Long itemId) {
-        return itemRepository.getItemById(itemId);
+        return null;
     }
 
     @Override
     public List<Item> searchAvailableItemBySubstring(String substring) {
-        List<Item> foundItems = new ArrayList<>();
-
-        if (!substring.isBlank()) {
-            foundItems = itemRepository.searchAvailableItemBySubstring(substring);
-        }
-
-        return foundItems;
+        return null;
     }
 }
