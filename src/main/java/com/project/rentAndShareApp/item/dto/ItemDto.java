@@ -19,6 +19,6 @@ public class ItemDto {
 
     @NotNull(message = "поле available не может быть null")
     Boolean available;
-    User owner;
+
     ItemRequest itemRequest;
 }

@@ -40,21 +40,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(Long userId, User user) {
         log.info("UserService: updateUser(): start with userId={} and user:'{}'", userId, user);
-        User userFromDb = getUserById(userId);
-
-        if (user.getName() == null) {
-            user.setName(userFromDb.getName());
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundException("user with id=" + userId + " not found");
         }
 
-        if (user.getEmail() == null) {
-            user.setEmail(userFromDb.getEmail());
-        } else if (userRepository.existsUserByEmail(user.getEmail()) && !userFromDb.getEmail().equals(user.getEmail())) {
+        User existUser = userRepository.getReferenceById(userId);
+
+        if (userRepository.existsUserByEmail(user.getEmail()) && !existUser.getEmail().equals(user.getEmail())) {
             throw new UserEmailAlreadyExistException("user with email:" + user.getEmail() + " already exist");
         }
 
-        user.setId(userId);
+        if (user.getName() != null) {
+            existUser.setName(user.getName());
+        }
 
-        return userRepository.save(user);
+        if (user.getEmail() != null) {
+            existUser.setEmail(user.getEmail());
+        }
+
+        return userRepository.save(existUser);
     }
 
     @Override

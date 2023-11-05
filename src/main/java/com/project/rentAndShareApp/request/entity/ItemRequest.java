@@ -21,6 +21,7 @@ public class ItemRequest {
     @JoinColumn(name = "user_id")
     private User requester;
 
+    @Column(name = "create_time")
     private LocalDateTime created;
 
     public ItemRequest() {

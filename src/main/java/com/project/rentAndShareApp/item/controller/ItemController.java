@@ -43,7 +43,7 @@ public class ItemController {
     public ItemDto addItem(@RequestBody @Valid ItemDto itemDto,
                            @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("ItemController: addItem(): start with userId = {} and itemDto: '{}'", userId, itemDto);
-        Item addedItem = itemService.addItem(itemMapper.toItem(itemDto), userId);
+        Item addedItem = itemService.addItem(itemMapper.toItem(itemDto, userId), userId);
 
         return itemMapper.toItemDto(addedItem);
     }
@@ -53,7 +53,7 @@ public class ItemController {
                               @PathVariable Long itemId,
                               @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("ItemController: updateItem(): start with userId = {} and itemId = {}", userId, itemId);
-        Item updatedItem = itemService.updateItem(itemMapper.toItem(itemDto), itemId, userId);
+        Item updatedItem = itemService.updateItem(itemMapper.toItem(itemDto, userId), itemId, userId);
 
         return itemMapper.toItemDto(updatedItem);
     }
