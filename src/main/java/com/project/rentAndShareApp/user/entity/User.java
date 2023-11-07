@@ -20,6 +20,7 @@ public class User {
 
     @NotNull(message = "поле email не может быть null")
     @Email(message = "некорректный email")
+    @Column(name = "email", unique = true)
     private String email;
 
     public User() {

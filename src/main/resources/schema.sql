@@ -33,6 +33,3 @@ CREATE TABLE IF NOT EXISTS booking (
     CONSTRAINT fr_booking_to_item FOREIGN KEY (item_id) REFERENCES item(item_id),
     CONSTRAINT fr_booking_to_users FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
-
-
-

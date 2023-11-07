@@ -6,6 +6,7 @@ import com.project.rentAndShareApp.user.entity.User;
 import com.project.rentAndShareApp.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,11 +31,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addUser(User user) {
         log.info("UserService: addUser(): start with user:'{}'", user);
-        if (userRepository.existsUserByEmail(user.getEmail())) {
+        User addedUser;
+
+        try {
+            addedUser = userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
             throw new UserEmailAlreadyExistException("user with email:" + user.getEmail() + " already exist");
         }
 
-        return userRepository.save(user);
+        return addedUser;
     }
 
     @Override

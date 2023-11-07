@@ -45,4 +45,16 @@ public class CustomExceptionHandler {
         log.error("UserEmailAlreadyExistException: " + exception.getMessage());
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handle(ItemNotAvailableNowException exception) {
+        log.error("ItemNotAvailableNowException: " + exception.getMessage());
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handle(BookingStartEndTimeNotValidException exception) {
+        log.error("BookingStartEndTimeNotValidException: " + exception.getMessage());
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

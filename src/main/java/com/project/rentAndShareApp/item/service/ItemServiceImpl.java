@@ -26,11 +26,13 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getListItemsForUserId(Long userId) {
+        log.info("ItemService: getListItemsForUserId(): start with userId={}", userId);
         return itemRepository.getItemsByOwnerId(userId);
     }
 
     @Override
     public Item addItem(Item item, Long userId) {
+        log.info("ItemService: addItem(): start with userId = {} and item: '{}'", userId, item);
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("user with id=" + userId + " not found");
         }
@@ -42,6 +44,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item updateItem(Item item, Long itemId, Long userId) {
+        log.info("ItemService: updateItem(): start with userId = {} and itemId = {}", userId, itemId);
         if (!itemRepository.existsById(itemId)) {
             throw new NotFoundException("item with id=" + itemId + " not found");
         }
@@ -69,6 +72,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item getItemById(Long itemId) {
+        log.info("ItemService: getItemById(): start with itemId = {}", itemId);
         Optional<Item> optionalItem = itemRepository.findById(itemId);
 
         if (optionalItem.isEmpty()) {
@@ -80,6 +84,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> searchAvailableItemBySubstring(String substring) {
+        log.info("ItemService: getItemById(): start with substring = '{}'", substring);
         List<Item> items = new ArrayList<>();
         String s = substring.toUpperCase();
 

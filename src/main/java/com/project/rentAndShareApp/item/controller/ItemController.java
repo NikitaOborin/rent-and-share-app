@@ -28,8 +28,8 @@ public class ItemController {
     }
 
     @GetMapping()
-    public List<ItemDto> getListItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("ItemController: getListItems(): start");
+    public List<ItemDto> getListItemsForUserId(@RequestHeader("X-Sharer-User-Id") Long userId) {
+        log.info("ItemController: getListItemsForUserId(): start with userId={}", userId);
         List<ItemDto> itemDtoList = new ArrayList<>();
 
         for (Item item : itemService.getListItemsForUserId(userId)) {
