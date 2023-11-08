@@ -3,9 +3,6 @@ package com.project.rentAndShareApp.user.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -18,8 +15,6 @@ public class User {
 
     private String name;
 
-    @NotNull(message = "поле email не может быть null")
-    @Email(message = "некорректный email")
     @Column(name = "email", unique = true)
     private String email;
 

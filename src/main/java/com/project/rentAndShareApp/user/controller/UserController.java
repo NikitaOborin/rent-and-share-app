@@ -1,6 +1,7 @@
 package com.project.rentAndShareApp.user.controller;
 
-import com.project.rentAndShareApp.user.dto.UserDto;
+import com.project.rentAndShareApp.user.dto.UserRequestDto;
+import com.project.rentAndShareApp.user.dto.UserResponseDto;
 import com.project.rentAndShareApp.user.entity.User;
 import com.project.rentAndShareApp.user.mapper.UserMapper;
 import com.project.rentAndShareApp.user.service.UserService;
@@ -28,9 +29,9 @@ public class UserController {
     }
 
     @GetMapping()
-    public List<UserDto> getListUsers() {
+    public List<UserResponseDto> getListUsers() {
         log.info("UserController: getListUsers(): start");
-        List<UserDto> userDtoList = new ArrayList<>();
+        List<UserResponseDto> userDtoList = new ArrayList<>();
 
         for (User user : userService.getListUsers()) {
             userDtoList.add(userMapper.toUserDto(user));
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public UserDto addUser(@RequestBody @Valid UserDto userDto) {
+    public UserResponseDto addUser(@RequestBody @Valid UserRequestDto userDto) {
         log.info("UserController: addUser(): start with userDtoId='{}'", userDto);
         User addedUser = userService.addUser(userMapper.toUser(userDto));
 
@@ -48,8 +49,8 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public UserDto updateUser(@PathVariable Long userId,
-                              @RequestBody UserDto userDto) {
+    public UserResponseDto updateUser(@PathVariable Long userId,
+                                      @RequestBody UserRequestDto userDto) {
         log.info("UserController: updateUser(): start with userDtoId={}", userId);
         User updatedUser = userService.updateUser(userId, userMapper.toUser(userDto));
 
@@ -57,7 +58,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDto getUserById(@PathVariable("id") Long userId) {
+    public UserResponseDto getUserById(@PathVariable("id") Long userId) {
         log.info("UserController: getUserById(): start with userId={}", userId);
         User user = userService.getUserById(userId);
 

@@ -1,6 +1,7 @@
 package com.project.rentAndShareApp.booking.controller;
 
-import com.project.rentAndShareApp.booking.dto.BookingDto;
+import com.project.rentAndShareApp.booking.dto.BookingRequestDto;
+import com.project.rentAndShareApp.booking.dto.BookingResponseDto;
 import com.project.rentAndShareApp.booking.entity.Booking;
 import com.project.rentAndShareApp.booking.mapper.BookingMapper;
 import com.project.rentAndShareApp.booking.service.BookingService;
@@ -14,7 +15,7 @@ import javax.validation.Valid;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping(path = "/bookings")
+@RequestMapping("/bookings")
 public class BookingController {
     private final BookingService bookingService;
     private final BookingMapper bookingMapper;
@@ -26,10 +27,10 @@ public class BookingController {
     }
 
     @PostMapping()
-    public BookingDto addBooking(@RequestBody @Valid BookingDto bookingDto,
-                                 @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public BookingResponseDto addBooking(@RequestBody @Valid BookingRequestDto bookingDto,
+                                         @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("BookingController: addBooking(): start with userId={} and bookingDto='{}'", userId, bookingDto);
-        Booking booking = bookingService.addBooking(bookingMapper.toBooking(bookingDto, userId), userId);
+        Booking booking = bookingService.addBooking(bookingMapper.toBooking(bookingDto, userId));
 
         return bookingMapper.toBookingDto(booking);
     }

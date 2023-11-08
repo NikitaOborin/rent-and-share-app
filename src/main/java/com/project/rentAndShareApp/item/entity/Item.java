@@ -5,8 +5,6 @@ import com.project.rentAndShareApp.user.entity.User;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -17,13 +15,8 @@ public class Item {
     @Column(name = "item_id")
     private Long id;
 
-    @NotBlank(message = "поле name не может быть пустым")
     private String name;
-
-    @NotBlank(message = "поле description не может быть пустым")
     private String description;
-
-    @NotNull(message = "поле available не может быть null")
     private Boolean available;
 
     @ManyToOne(fetch = FetchType.LAZY)

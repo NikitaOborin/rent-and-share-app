@@ -31,8 +31,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item addItem(Item item, Long userId) {
-        log.info("ItemService: addItem(): start with userId = {} and item: '{}'", userId, item);
+    public Item addItem(Item item) {
+        log.info("ItemService: addItem(): start with item: '{}'", item);
+        Long userId = item.getOwner().getId();
+
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("user with id=" + userId + " not found");
         }
@@ -43,8 +45,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item updateItem(Item item, Long itemId, Long userId) {
-        log.info("ItemService: updateItem(): start with userId = {} and itemId = {}", userId, itemId);
+    public Item updateItem(Item item) {
+        log.info("ItemService: updateItem(): start item={}", item);
+        Long itemId = item.getId();
+        Long userId = item.getOwner().getId();
+
         if (!itemRepository.existsById(itemId)) {
             throw new NotFoundException("item with id=" + itemId + " not found");
         }

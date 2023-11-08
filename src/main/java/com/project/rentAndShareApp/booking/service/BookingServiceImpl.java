@@ -27,7 +27,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking addBooking(Booking booking, Long userId) {
+    public Booking addBooking(Booking booking) {
+        Long userId = booking.getBooker().getId();
+
         if (isNotValidStartEndTime(booking)) {
             throw new BookingStartEndTimeNotValidException("booking start/end time not valid");
         }
