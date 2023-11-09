@@ -1,11 +1,11 @@
 package com.project.rentAndShareApp.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -47,7 +47,7 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handle(ItemNotAvailableNowException exception) {
+    public ResponseEntity<String> handle(ItemAvailableException exception) {
         log.error("ItemNotAvailableNowException: " + exception.getMessage());
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
@@ -55,6 +55,12 @@ public class CustomExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<String> handle(BookingStartEndTimeNotValidException exception) {
         log.error("BookingStartEndTimeNotValidException: " + exception.getMessage());
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handle(MissingServletRequestParameterException exception) {
+        log.error("MissingServletRequestParameterException: " + exception.getMessage());
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

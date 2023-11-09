@@ -29,8 +29,27 @@ public class BookingController {
     @PostMapping()
     public BookingResponseDto addBooking(@RequestBody @Valid BookingRequestDto bookingDto,
                                          @RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("BookingController: addBooking(): start with userId={} and bookingDto='{}'", userId, bookingDto);
+        log.info("BookingController: addBooking(): start with bookerId={} and bookingDto='{}'", userId, bookingDto);
         Booking booking = bookingService.addBooking(bookingMapper.toBooking(bookingDto, userId));
+
+        return bookingMapper.toBookingDto(booking);
+    }
+
+    @PatchMapping("/{bookingId}")
+    public BookingResponseDto approveBookingByUserId(@PathVariable Long bookingId,
+                                                     @RequestHeader("X-Sharer-User-Id") Long userId,
+                                                     @RequestParam Boolean approved) {
+        log.info("BookingController: approveBookingByUserId(): start with bookingId={} and ownerId={}", bookingId, userId);
+        Booking booking = bookingService.approveBookingByUserId(bookingId, approved, userId);
+
+        return bookingMapper.toBookingDto(booking);
+    }
+
+    @GetMapping("/{bookingId}")
+    public BookingResponseDto getBookingById(@PathVariable Long bookingId,
+                                             @RequestHeader("X-Sharer-User-Id") Long userId) {
+        log.info("BookingController: getBookingById(): start with bookingId={} and userId={}", bookingId, userId);
+        Booking booking = bookingService.getBookingById(bookingId, userId);
 
         return bookingMapper.toBookingDto(booking);
     }
