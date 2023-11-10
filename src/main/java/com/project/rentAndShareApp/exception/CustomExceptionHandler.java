@@ -63,4 +63,10 @@ public class CustomExceptionHandler {
         log.error("MissingServletRequestParameterException: " + exception.getMessage());
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handle(BookingUnsupportedStatusException exception) {
+        log.error("BookingUnsupportedStatusException: " + exception.getMessage());
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

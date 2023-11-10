@@ -11,6 +11,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Validated
@@ -52,5 +54,37 @@ public class BookingController {
         Booking booking = bookingService.getBookingById(bookingId, userId);
 
         return bookingMapper.toBookingDto(booking);
+    }
+
+    @GetMapping()
+    public List<BookingResponseDto> getListBookingByBookerIdAndState(
+            @RequestHeader("X-Sharer-User-Id") Long bookerId,
+            @RequestParam(required = false, defaultValue = "ALL") String state) {
+        log.info("BookingController: getListBookingByBookerIdAndState(): " +
+                "start with bookerId={} and state='{}'", bookerId, state);
+        List<Booking> bookings = bookingService.getListBookingByBookerIdAndState(bookerId, state);
+        List<BookingResponseDto> bookingDtoList = new ArrayList<>();
+
+        for (Booking booking : bookings) {
+            bookingDtoList.add(bookingMapper.toBookingDto(booking));
+        }
+
+        return bookingDtoList;
+    }
+
+    @GetMapping("/owner")
+    public List<BookingResponseDto> getListBookingByOwnerIdAndState(
+            @RequestHeader("X-Sharer-User-Id") Long ownerId,
+            @RequestParam(required = false, defaultValue = "ALL") String state) {
+        log.info("BookingController: getListBookingByOwnerIdAndState(): " +
+                "start with ownerId={} and state='{}'", ownerId, state);
+        List<Booking> bookings = bookingService.getListBookingByOwnerIdAndState(ownerId, state);
+        List<BookingResponseDto> bookingDtoList = new ArrayList<>();
+
+        for (Booking booking : bookings) {
+            bookingDtoList.add(bookingMapper.toBookingDto(booking));
+        }
+
+        return bookingDtoList;
     }
 }
