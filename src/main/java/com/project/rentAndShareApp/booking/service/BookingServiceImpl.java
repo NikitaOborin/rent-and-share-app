@@ -5,6 +5,7 @@ import com.project.rentAndShareApp.booking.entity.BookingCurrentState;
 import com.project.rentAndShareApp.booking.entity.BookingStatus;
 import com.project.rentAndShareApp.booking.repository.BookingRepository;
 import com.project.rentAndShareApp.exception.BookingStartEndTimeNotValidException;
+import com.project.rentAndShareApp.exception.BookingUnsupportedStatusException;
 import com.project.rentAndShareApp.exception.ItemAvailableException;
 import com.project.rentAndShareApp.exception.NotFoundException;
 import com.project.rentAndShareApp.item.entity.Item;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -127,7 +129,7 @@ public class BookingServiceImpl implements BookingService {
         log.info("BookingService: getListBookingByBookerIdAndState(): start with bookerId={} " +
                 "and state='{}'", bookerId, stateString);
         BookingCurrentState state = BookingCurrentState.from(stateString);
-        List<Booking> bookings;
+        List<Booking> bookings = new ArrayList<>();
 
         if (!userRepository.existsById(bookerId)) {
             throw new NotFoundException("booker with id=" + bookerId + " not found");
@@ -152,8 +154,6 @@ public class BookingServiceImpl implements BookingService {
 //            case REJECTED:
 //                bookings =
 //                break;
-            default:
-                throw new IllegalArgumentException("Unknown state: " + state);
         }
 
         return bookings;
@@ -164,7 +164,7 @@ public class BookingServiceImpl implements BookingService {
         log.info("BookingService: getListBookingByOwnerIdAndState(): start with ownerId={} " +
                 "and state='{}'", ownerId, stateString);
         BookingCurrentState state = BookingCurrentState.from(stateString);
-        List<Booking> bookings;
+        List<Booking> bookings = new ArrayList<>();
 
         if (!userRepository.existsById(ownerId)) {
             throw new NotFoundException("owner with id=" + ownerId + " not found");
@@ -189,8 +189,6 @@ public class BookingServiceImpl implements BookingService {
 //            case REJECTED:
 //                bookings =
 //                break;
-            default:
-                throw new IllegalArgumentException("Unknown state: " + state);
         }
 
         return bookings;

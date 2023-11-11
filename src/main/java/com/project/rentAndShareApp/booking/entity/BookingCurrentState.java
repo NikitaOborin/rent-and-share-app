@@ -20,7 +20,7 @@ public enum BookingCurrentState {
         }
 
         if (state == null) {
-            throw new BookingUnsupportedStatusException("Unknown state: " + stringState);
+            throw new BookingUnsupportedStatusException("booking not have state='" + stringState + "'");
         }
 
         return state;
