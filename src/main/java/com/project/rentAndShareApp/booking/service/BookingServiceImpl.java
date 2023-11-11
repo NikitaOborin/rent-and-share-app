@@ -5,7 +5,6 @@ import com.project.rentAndShareApp.booking.entity.BookingCurrentState;
 import com.project.rentAndShareApp.booking.entity.BookingStatus;
 import com.project.rentAndShareApp.booking.repository.BookingRepository;
 import com.project.rentAndShareApp.exception.BookingStartEndTimeNotValidException;
-import com.project.rentAndShareApp.exception.BookingUnsupportedStatusException;
 import com.project.rentAndShareApp.exception.ItemAvailableException;
 import com.project.rentAndShareApp.exception.NotFoundException;
 import com.project.rentAndShareApp.item.entity.Item;
@@ -137,23 +136,34 @@ public class BookingServiceImpl implements BookingService {
 
         switch (state) {
             case ALL:
-                bookings = bookingRepository.getBookingsByBookerIdOrderByStartDesc(bookerId);
+                bookings = bookingRepository.getByBookerIdOrderByStartDesc(bookerId);
                 break;
-//            case CURRENT:
-//                bookings =
-//                break;
-//            case PAST:
-//                bookings =
-//                break;
-//            case FUTURE:
-//                bookings =
-//                break;
-//            case WAITING:
-//                bookings =
-//                break;
-//            case REJECTED:
-//                bookings =
-//                break;
+
+            case CURRENT:
+                bookings = bookingRepository
+                        .getByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(
+                        bookerId, LocalDateTime.now(), LocalDateTime.now());
+                break;
+
+            case PAST:
+                bookings = bookingRepository
+                        .getByBookerIdAndEndBeforeOrderByStartDesc(bookerId, LocalDateTime.now());
+                break;
+
+            case FUTURE:
+                bookings = bookingRepository
+                        .getByBookerIdAndStartAfterOrderByStartDesc(bookerId, LocalDateTime.now());
+                break;
+
+            case WAITING:
+                bookings = bookingRepository.getByBookerIdAndStatusEqualsOrderByStartDesc(
+                        bookerId, BookingStatus.WAITING);
+                break;
+
+            case REJECTED:
+                bookings = bookingRepository.getByBookerIdAndStatusEqualsOrderByStartDesc(
+                        bookerId, BookingStatus.REJECTED);
+                break;
         }
 
         return bookings;
@@ -172,23 +182,33 @@ public class BookingServiceImpl implements BookingService {
 
         switch (state) {
             case ALL:
-                bookings = bookingRepository.getBookingsByItemOwnerIdOrderByStartDesc(ownerId);
+                bookings = bookingRepository.getByItemOwnerIdOrderByStartDesc(ownerId);
                 break;
-//            case CURRENT:
-//                bookings =
-//                break;
-//            case PAST:
-//                bookings =
-//                break;
-//            case FUTURE:
-//                bookings =
-//                break;
-//            case WAITING:
-//                bookings =
-//                break;
-//            case REJECTED:
-//                bookings =
-//                break;
+
+            case CURRENT:
+                bookings = bookingRepository.getByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(
+                        ownerId, LocalDateTime.now(), LocalDateTime.now());
+                break;
+
+            case PAST:
+                bookings = bookingRepository.getByItemOwnerIdAndEndBeforeOrderByStartDesc(
+                        ownerId, LocalDateTime.now());
+                break;
+
+            case FUTURE:
+                bookings = bookingRepository.getByItemOwnerIdAndStartAfterOrderByStartDesc(
+                        ownerId, LocalDateTime.now());
+                break;
+
+            case WAITING:
+                bookings = bookingRepository.getByItemOwnerIdAndStatusEqualsOrderByStartDesc(
+                        ownerId, BookingStatus.WAITING);
+                break;
+
+            case REJECTED:
+                bookings = bookingRepository.getByItemOwnerIdAndStatusEqualsOrderByStartDesc(
+                        ownerId, BookingStatus.REJECTED);
+                break;
         }
 
         return bookings;
