@@ -1,8 +1,11 @@
 package com.project.rentAndShareApp.booking.service;
 
+import com.project.rentAndShareApp.booking.dto.BookingRequestDto;
+import com.project.rentAndShareApp.booking.dto.BookingResponseDto;
 import com.project.rentAndShareApp.booking.entity.Booking;
 import com.project.rentAndShareApp.booking.entity.BookingCurrentState;
 import com.project.rentAndShareApp.booking.entity.BookingStatus;
+import com.project.rentAndShareApp.booking.mapper.BookingMapper;
 import com.project.rentAndShareApp.booking.repository.BookingRepository;
 import com.project.rentAndShareApp.exception.BookingStartEndTimeNotValidException;
 import com.project.rentAndShareApp.exception.ItemAvailableException;
@@ -25,19 +28,24 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final BookingMapper bookingMapper;
 
     @Autowired
     public BookingServiceImpl(BookingRepository bookingRepository,
                               UserRepository userRepository,
-                              ItemRepository itemRepository) {
+                              ItemRepository itemRepository,
+                              BookingMapper bookingMapper) {
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
+        this.bookingMapper = bookingMapper;
     }
 
     @Override
-    public Booking addBooking(Booking booking) {
-        log.info("BookingService: addBooking(): start with booking='{}'", booking);
+    public BookingResponseDto addBooking(BookingRequestDto bookingDto, Long userId) {
+        log.info("BookingService: addBooking(): start with bookerId={} and bookingDto='{}'", userId, bookingDto);
+        Booking booking = bookingMapper.toBooking(bookingDto, userId);
+
         Long bookerId = booking.getBooker().getId();
         Long itemId = booking.getItem().getId();
 
@@ -68,11 +76,11 @@ public class BookingServiceImpl implements BookingService {
         booking.setBooker(booker);
         booking.setItem(item);
 
-        return bookingRepository.save(booking);
+        return bookingMapper.toBookingDto(bookingRepository.save(booking));
     }
 
     @Override
-    public Booking approveBookingByUserId(Long bookingId, Boolean approve, Long ownerId) {
+    public BookingResponseDto approveBookingByUserId(Long bookingId, Boolean approve, Long ownerId) {
         log.info("BookingService: approveBookingByUserId(): start with bookingId={} " +
                 "and ownerId={}", bookingId, ownerId);
         if (!bookingRepository.existsById(bookingId)) {
@@ -96,7 +104,7 @@ public class BookingServiceImpl implements BookingService {
             booking.setStatus(BookingStatus.REJECTED);
         }
 
-        return bookingRepository.save(booking);
+        return bookingMapper.toBookingDto(bookingRepository.save(booking));
     }
 
     @Override

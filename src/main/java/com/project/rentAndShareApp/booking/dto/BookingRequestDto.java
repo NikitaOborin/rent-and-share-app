@@ -1,12 +1,12 @@
 package com.project.rentAndShareApp.booking.dto;
 
-import lombok.Value;
+import lombok.Getter;
 
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Value
+@Getter
 public class BookingRequestDto {
     @NotNull(message = "field 'itemId' should not be null")
     Long itemId;

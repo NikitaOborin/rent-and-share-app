@@ -2,6 +2,7 @@ package com.project.rentAndShareApp.item.controller;
 
 import com.project.rentAndShareApp.item.dto.ItemRequestDto;
 import com.project.rentAndShareApp.item.dto.ItemResponseDto;
+import com.project.rentAndShareApp.item.dto.ItemWithBookingInfoDto;
 import com.project.rentAndShareApp.item.entity.Item;
 import com.project.rentAndShareApp.item.mapper.ItemMapper;
 import com.project.rentAndShareApp.item.service.ItemService;
@@ -29,15 +30,9 @@ public class ItemController {
     }
 
     @GetMapping()
-    public List<ItemResponseDto> getListItemsForUserId(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("ItemController: getListItemsForUserId(): start with userId={}", userId);
-        List<ItemResponseDto> itemDtoList = new ArrayList<>();
-
-        for (Item item : itemService.getListItemsForUserId(userId)) {
-            itemDtoList.add(itemMapper.toItemDto(item));
-        }
-
-        return itemDtoList;
+    public List<ItemWithBookingInfoDto> getListItemsByOwnerId(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        log.info("ItemController: getListItemsForUserId(): start with ownerId={}", ownerId);
+        return itemService.getListItemsByOwnerId(ownerId);
     }
 
     @PostMapping()
@@ -60,11 +55,10 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemResponseDto getItemById(@PathVariable Long itemId) {
-        log.info("ItemController: getItemById(): start with itemId = {}", itemId);
-        Item item = itemService.getItemById(itemId);
-
-        return itemMapper.toItemDto(item);
+    public ItemWithBookingInfoDto getItemById(@PathVariable Long itemId,
+                                              @RequestHeader(value = "X-Sharer-User-Id", required = false) Long userId) {
+        log.info("ItemController: getItemById(): start with itemId = {} and with userId={}", itemId, userId);
+        return itemService.getItemByIdAndUserId(itemId, userId);
     }
 
     @GetMapping("/search")
@@ -78,4 +72,6 @@ public class ItemController {
 
         return itemDtoList;
     }
+
+
 }

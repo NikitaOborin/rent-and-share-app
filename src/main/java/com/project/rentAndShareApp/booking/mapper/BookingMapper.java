@@ -2,8 +2,11 @@ package com.project.rentAndShareApp.booking.mapper;
 
 import com.project.rentAndShareApp.booking.dto.BookingRequestDto;
 import com.project.rentAndShareApp.booking.dto.BookingResponseDto;
+import com.project.rentAndShareApp.booking.dto.ShortBookingDto;
 import com.project.rentAndShareApp.booking.entity.Booking;
+import com.project.rentAndShareApp.item.dto.ShortItemDto;
 import com.project.rentAndShareApp.item.entity.Item;
+import com.project.rentAndShareApp.user.dto.ShortUserDto;
 import com.project.rentAndShareApp.user.entity.User;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +18,13 @@ public class BookingMapper {
                 booking.getStart(),
                 booking.getEnd(),
                 booking.getStatus(),
-                new BookingResponseDto.ShortUserDto(booking.getBooker().getId()),
-                new BookingResponseDto.ShortItemDto(booking.getItem().getId(), booking.getItem().getName())
+                new ShortUserDto(
+                        booking.getBooker().getId()
+                ),
+                new ShortItemDto(
+                        booking.getItem().getId(),
+                        booking.getItem().getName()
+                )
         );
     }
 
@@ -35,5 +43,12 @@ public class BookingMapper {
         booking.setBooker(booker);
 
         return booking;
+    }
+
+    public ShortBookingDto toShortBookingDto(Booking booking) {
+        return new ShortBookingDto(
+                booking.getId(),
+                booking.getBooker().getId()
+        );
     }
 }

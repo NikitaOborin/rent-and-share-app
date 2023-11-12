@@ -1,14 +1,16 @@
 package com.project.rentAndShareApp.booking.service;
 
+import com.project.rentAndShareApp.booking.dto.BookingRequestDto;
+import com.project.rentAndShareApp.booking.dto.BookingResponseDto;
 import com.project.rentAndShareApp.booking.entity.Booking;
 import com.project.rentAndShareApp.booking.entity.BookingCurrentState;
 
 import java.util.List;
 
 public interface BookingService {
-    Booking addBooking(Booking booking);
+    BookingResponseDto addBooking(BookingRequestDto bookingDto, Long userId);
 
-    Booking approveBookingByUserId(Long bookingId, Boolean approve, Long userId);
+    BookingResponseDto approveBookingByUserId(Long bookingId, Boolean approve, Long userId);
 
     Booking getBookingById(Long bookingId, Long userId);
 

@@ -1,13 +1,13 @@
 package com.project.rentAndShareApp.booking.dto;
 
 import com.project.rentAndShareApp.booking.entity.BookingStatus;
+import com.project.rentAndShareApp.item.dto.ShortItemDto;
+import com.project.rentAndShareApp.user.dto.ShortUserDto;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.Value;
 
 import java.time.LocalDateTime;
 
-@Value
+@Getter
 public class BookingResponseDto {
     Long id;
     LocalDateTime start;
@@ -16,25 +16,17 @@ public class BookingResponseDto {
     ShortUserDto booker;
     ShortItemDto item;
 
-    @Getter
-    @Setter
-    public static class ShortUserDto {
-        Long id;
-
-        public ShortUserDto(Long id) {
-            this.id = id;
-        }
-    }
-
-    @Getter
-    @Setter
-    public static class ShortItemDto {
-        Long id;
-        String name;
-
-        public ShortItemDto(Long id, String name) {
-            this.id = id;
-            this.name = name;
-        }
+    public BookingResponseDto(Long id,
+                              LocalDateTime start,
+                              LocalDateTime end,
+                              BookingStatus status,
+                              ShortUserDto booker,
+                              ShortItemDto item) {
+        this.id = id;
+        this.start = start;
+        this.end = end;
+        this.status = status;
+        this.booker = booker;
+        this.item = item;
     }
 }

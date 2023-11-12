@@ -32,9 +32,7 @@ public class BookingController {
     public BookingResponseDto addBooking(@RequestBody @Valid BookingRequestDto bookingDto,
                                          @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("BookingController: addBooking(): start with bookerId={} and bookingDto='{}'", userId, bookingDto);
-        Booking booking = bookingService.addBooking(bookingMapper.toBooking(bookingDto, userId));
-
-        return bookingMapper.toBookingDto(booking);
+        return bookingService.addBooking(bookingDto, userId);
     }
 
     @PatchMapping("/{bookingId}")
@@ -42,9 +40,7 @@ public class BookingController {
                                                      @RequestHeader("X-Sharer-User-Id") Long userId,
                                                      @RequestParam Boolean approved) {
         log.info("BookingController: approveBookingByUserId(): start with bookingId={} and ownerId={}", bookingId, userId);
-        Booking booking = bookingService.approveBookingByUserId(bookingId, approved, userId);
-
-        return bookingMapper.toBookingDto(booking);
+        return bookingService.approveBookingByUserId(bookingId, approved, userId);
     }
 
     @GetMapping("/{bookingId}")

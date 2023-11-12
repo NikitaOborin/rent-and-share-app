@@ -1,11 +1,11 @@
 package com.project.rentAndShareApp.item.dto;
 
-import lombok.Value;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Value
+@Getter
 public class ItemRequestDto {
     @NotBlank(message = "field 'name' should not be blank")
     String name;

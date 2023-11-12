@@ -1,11 +1,11 @@
 package com.project.rentAndShareApp.user.dto;
 
-import lombok.Value;
+import lombok.Getter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-@Value
+@Getter
 public class UserRequestDto {
     String name;
 
