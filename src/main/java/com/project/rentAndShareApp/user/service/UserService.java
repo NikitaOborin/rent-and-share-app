@@ -1,17 +1,18 @@
 package com.project.rentAndShareApp.user.service;
 
-import com.project.rentAndShareApp.user.entity.User;
+import com.project.rentAndShareApp.user.dto.UserRequestDto;
+import com.project.rentAndShareApp.user.dto.UserResponseDto;
 
 import java.util.List;
 
 public interface UserService {
-    List<User> getListUsers();
+    List<UserResponseDto> getListUsers();
 
-    User addUser(User user);
+    UserResponseDto addUser(UserRequestDto userDto);
 
-    User updateUser(Long userId, User user);
+    UserResponseDto updateUser(UserRequestDto userDto, Long userId);
 
-    User getUserById(Long userId);
+    UserResponseDto getUserById(Long userId);
 
     void deleteUserById(Long userId);
 }

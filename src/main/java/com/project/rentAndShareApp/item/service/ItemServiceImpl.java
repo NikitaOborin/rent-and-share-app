@@ -4,6 +4,8 @@ import com.project.rentAndShareApp.booking.entity.Booking;
 import com.project.rentAndShareApp.booking.mapper.BookingMapper;
 import com.project.rentAndShareApp.booking.repository.BookingRepository;
 import com.project.rentAndShareApp.exception.NotFoundException;
+import com.project.rentAndShareApp.item.dto.ItemRequestDto;
+import com.project.rentAndShareApp.item.dto.ItemResponseDto;
 import com.project.rentAndShareApp.item.dto.ItemWithBookingInfoDto;
 import com.project.rentAndShareApp.item.entity.Item;
 import com.project.rentAndShareApp.item.mapper.ItemMapper;
@@ -66,9 +68,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item addItem(Item item) {
-        log.info("ItemService: addItem(): start with item: '{}'", item);
-        Long userId = item.getOwner().getId();
+    public ItemResponseDto addItem(ItemRequestDto itemDto, Long userId) {
+        log.info("ItemService: addItem(): start with userId = {} and itemDto: '{}'", userId, itemDto);
+        Item item = itemMapper.toItem(itemDto, userId);
 
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("user with id=" + userId + " not found");
@@ -76,14 +78,13 @@ public class ItemServiceImpl implements ItemService {
 
         item.setOwner(userRepository.getReferenceById(userId));
 
-        return itemRepository.save(item);
+        return itemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
-    public Item updateItem(Item item) {
-        log.info("ItemService: updateItem(): start item={}", item);
-        Long itemId = item.getId();
-        Long userId = item.getOwner().getId();
+    public ItemResponseDto updateItem(ItemRequestDto itemDto, Long itemId, Long userId) {
+        log.info("ItemService: updateItem(): start with userId = {} and itemId = {}", userId, itemId);
+        Item item = itemMapper.toItem(itemDto, itemId, userId);
 
         if (!itemRepository.existsById(itemId)) {
             throw new NotFoundException("item with id=" + itemId + " not found");
@@ -107,7 +108,7 @@ public class ItemServiceImpl implements ItemService {
             existItem.setAvailable(item.getAvailable());
         }
 
-        return itemRepository.save(existItem);
+        return itemMapper.toItemDto(itemRepository.save(existItem));
     }
 
     @Override
@@ -139,15 +140,20 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> searchAvailableItemBySubstring(String substring) {
+    public List<ItemResponseDto> searchAvailableItemBySubstring(String substring) {
         log.info("ItemService: getItemById(): start with substring = '{}'", substring);
         List<Item> items = new ArrayList<>();
+        List<ItemResponseDto> itemDtoList = new ArrayList<>();
         String s = substring.toUpperCase();
 
         if (!substring.isBlank()) {
             items = itemRepository.getByNameIgnoreCaseOrDescriptionIgnoreCaseContainingAndAvailableIsTrueOrderById(s, s);
         }
 
-        return items;
+        for (Item item : items) {
+            itemDtoList.add(itemMapper.toItemDto(item));
+        }
+
+        return itemDtoList;
     }
 }

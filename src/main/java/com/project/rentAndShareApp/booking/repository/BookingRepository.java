@@ -1,7 +1,6 @@
 package com.project.rentAndShareApp.booking.repository;
 
 import com.project.rentAndShareApp.booking.entity.Booking;
-import com.project.rentAndShareApp.booking.entity.BookingCurrentState;
 import com.project.rentAndShareApp.booking.entity.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 

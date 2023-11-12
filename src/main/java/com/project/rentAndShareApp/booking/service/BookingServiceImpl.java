@@ -108,7 +108,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking getBookingById(Long bookingId, Long userId) {
+    public BookingResponseDto getBookingById(Long bookingId, Long userId) {
         log.info("BookingService: getBookingById(): start with bookingId={} and userId={}", bookingId, userId);
         if (!bookingRepository.existsById(bookingId)) {
             throw new NotFoundException("booking with id=" + bookingId + " not found");
@@ -128,15 +128,16 @@ public class BookingServiceImpl implements BookingService {
                     "and not booker for booking with id=" + bookingId);
         }
 
-        return booking;
+        return bookingMapper.toBookingDto(booking);
     }
 
     @Override
-    public List<Booking> getListBookingByBookerIdAndState(Long bookerId, String stateString) {
+    public List<BookingResponseDto> getListBookingByBookerIdAndState(Long bookerId, String stateString) {
         log.info("BookingService: getListBookingByBookerIdAndState(): start with bookerId={} " +
                 "and state='{}'", bookerId, stateString);
         BookingCurrentState state = BookingCurrentState.from(stateString);
         List<Booking> bookings = new ArrayList<>();
+        List<BookingResponseDto> bookingDtoList = new ArrayList<>();
 
         if (!userRepository.existsById(bookerId)) {
             throw new NotFoundException("booker with id=" + bookerId + " not found");
@@ -174,15 +175,20 @@ public class BookingServiceImpl implements BookingService {
                 break;
         }
 
-        return bookings;
+        for (Booking booking : bookings) {
+            bookingDtoList.add(bookingMapper.toBookingDto(booking));
+        }
+
+        return bookingDtoList;
     }
 
     @Override
-    public List<Booking> getListBookingByOwnerIdAndState(Long ownerId, String stateString) {
+    public List<BookingResponseDto> getListBookingByOwnerIdAndState(Long ownerId, String stateString) {
         log.info("BookingService: getListBookingByOwnerIdAndState(): start with ownerId={} " +
                 "and state='{}'", ownerId, stateString);
         BookingCurrentState state = BookingCurrentState.from(stateString);
         List<Booking> bookings = new ArrayList<>();
+        List<BookingResponseDto> bookingDtoList = new ArrayList<>();
 
         if (!userRepository.existsById(ownerId)) {
             throw new NotFoundException("owner with id=" + ownerId + " not found");
@@ -219,7 +225,11 @@ public class BookingServiceImpl implements BookingService {
                 break;
         }
 
-        return bookings;
+        for (Booking booking : bookings) {
+            bookingDtoList.add(bookingMapper.toBookingDto(booking));
+        }
+
+        return bookingDtoList;
     }
 
     private boolean isNotValidStartEndTime(Booking booking) {
