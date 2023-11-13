@@ -1,8 +1,6 @@
 package com.project.rentAndShareApp.item.controller;
 
-import com.project.rentAndShareApp.item.dto.ItemRequestDto;
-import com.project.rentAndShareApp.item.dto.ItemResponseDto;
-import com.project.rentAndShareApp.item.dto.ItemWithBookingInfoDto;
+import com.project.rentAndShareApp.item.dto.*;
 import com.project.rentAndShareApp.item.service.ItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,7 @@ public class ItemController {
     }
 
     @GetMapping()
-    public List<ItemWithBookingInfoDto> getListItemsByOwnerId(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
+    public List<ItemWithBookingCommentInfoDto> getListItemsByOwnerId(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
         log.info("ItemController: getListItemsForUserId(): start with ownerId={}", ownerId);
         return itemService.getListItemsByOwnerId(ownerId);
     }
@@ -46,8 +44,9 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemWithBookingInfoDto getItemById(@PathVariable Long itemId,
-                                              @RequestHeader(value = "X-Sharer-User-Id", required = false) Long userId) {
+    public ItemWithBookingCommentInfoDto getItemById(@PathVariable Long itemId,
+                                                     @RequestHeader(value = "X-Sharer-User-Id", required = false)
+                                                     Long userId) {
         log.info("ItemController: getItemById(): start with itemId = {} and with userId={}", itemId, userId);
         return itemService.getItemByIdAndUserId(itemId, userId);
     }
@@ -58,5 +57,12 @@ public class ItemController {
         return itemService.searchAvailableItemBySubstring(text);
     }
 
-
+    @PostMapping("/{itemId}/comment")
+    public CommentResponseDto addComment(@RequestBody @Valid CommentRequestDto commentDto,
+                                         @PathVariable Long itemId,
+                                         @RequestHeader("X-Sharer-User-Id") Long userId) {
+        log.info("ItemController: addComment(): start with commentDto='{}', itemId={} and userId={}",
+                commentDto, itemId, userId);
+        return itemService.addComment(commentDto, itemId, userId);
+    }
 }

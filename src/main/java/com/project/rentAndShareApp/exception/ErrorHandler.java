@@ -129,4 +129,17 @@ public class ErrorHandler {
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handle(CommentWithoutBookingException e) {
+        log.error("CommentWithoutBookingException: " + e.getMessage());
+        ErrorResponse exceptionResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "CommentWithoutBookingException",
+                e.getMessage()
+        );
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 }
