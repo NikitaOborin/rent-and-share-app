@@ -63,16 +63,23 @@ public class ItemServiceImpl implements ItemService {
                     item.getId(), LocalDateTime.now());
 
             if (lastBooking != null && nextBooking != null) {
-//                ShortCommentDto commentDto =
+                List<CommentResponseDto> commentDtoList = new ArrayList<>();
+                List<Comment> comments = commentRepository.findByItemId(item.getId());
+
+                for (Comment comment : comments) {
+                    commentDtoList.add(commentMapper.toCommentDto(comment));
+                }
 
                 itemsDtoList.add(itemMapper.toItemWithBookingCommentInfoDto(
                         item,
                         bookingMapper.toShortBookingDto(lastBooking),
-                        bookingMapper.toShortBookingDto(nextBooking))
+                        bookingMapper.toShortBookingDto(nextBooking),
+                        commentDtoList
+                        )
                 );
             } else {
                 itemsDtoList.add(itemMapper.toItemWithBookingCommentInfoDto(
-                        item, null, null, null)
+                        item, null, null, new ArrayList<>())
                 );
             }
         }
@@ -132,9 +139,16 @@ public class ItemServiceImpl implements ItemService {
         }
 
         Item item = itemRepository.getReferenceById(itemId);
+
+        List<CommentResponseDto> commentDtoList = new ArrayList<>();
+        List<Comment> comments = commentRepository.findByItemId(itemId);
+
+        for (Comment comment : comments) {
+            commentDtoList.add(commentMapper.toCommentDto(comment));
+        }
+
         ItemWithBookingCommentInfoDto itemDto = itemMapper.toItemWithBookingCommentInfoDto(
-                item, null, null, null
-        );
+                item, null, null, commentDtoList);
 
         if (item.getOwner().getId().equals(userId)) {
             Booking lastBooking = bookingRepository.getFirstByItemIdAndEndBeforeOrderByEndDesc(
@@ -146,7 +160,8 @@ public class ItemServiceImpl implements ItemService {
                 itemDto = itemMapper.toItemWithBookingCommentInfoDto(
                         item,
                         bookingMapper.toShortBookingDto(lastBooking),
-                        bookingMapper.toShortBookingDto(nextBooking)
+                        bookingMapper.toShortBookingDto(nextBooking),
+                        commentDtoList
                 );
             }
         }

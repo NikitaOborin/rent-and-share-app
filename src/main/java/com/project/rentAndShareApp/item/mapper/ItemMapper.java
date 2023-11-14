@@ -1,10 +1,7 @@
 package com.project.rentAndShareApp.item.mapper;
 
 import com.project.rentAndShareApp.booking.dto.ShortBookingDto;
-import com.project.rentAndShareApp.item.dto.ShortCommentDto;
-import com.project.rentAndShareApp.item.dto.ItemRequestDto;
-import com.project.rentAndShareApp.item.dto.ItemResponseDto;
-import com.project.rentAndShareApp.item.dto.ItemWithBookingCommentInfoDto;
+import com.project.rentAndShareApp.item.dto.*;
 import com.project.rentAndShareApp.item.entity.Item;
 import com.project.rentAndShareApp.user.entity.User;
 import org.springframework.stereotype.Component;
@@ -25,7 +22,7 @@ public class ItemMapper {
     public ItemWithBookingCommentInfoDto toItemWithBookingCommentInfoDto(Item item,
                                                                          ShortBookingDto lastBooking,
                                                                          ShortBookingDto nextBooking,
-                                                                         List<ShortCommentDto> comments) {
+                                                                         List<CommentResponseDto> comments) {
         return new ItemWithBookingCommentInfoDto(
                 item.getId(),
                 item.getName(),

@@ -13,7 +13,7 @@ public class ItemWithBookingCommentInfoDto {
     private final Boolean available;
     private final ShortBookingDto lastBooking;
     private final ShortBookingDto nextBooking;
-    private final List<ShortCommentDto> comments;
+    private final List<CommentResponseDto> comments;
 
     public ItemWithBookingCommentInfoDto(Long id,
                                          String name,
@@ -21,7 +21,7 @@ public class ItemWithBookingCommentInfoDto {
                                          Boolean available,
                                          ShortBookingDto lastBooking,
                                          ShortBookingDto nextBooking,
-                                         List<ShortCommentDto> comments) {
+                                         List<CommentResponseDto> comments) {
         this.id = id;
         this.name = name;
         this.description = description;

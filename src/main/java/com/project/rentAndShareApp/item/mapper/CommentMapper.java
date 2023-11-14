@@ -2,7 +2,6 @@ package com.project.rentAndShareApp.item.mapper;
 
 import com.project.rentAndShareApp.item.dto.CommentRequestDto;
 import com.project.rentAndShareApp.item.dto.CommentResponseDto;
-import com.project.rentAndShareApp.item.dto.ShortCommentDto;
 import com.project.rentAndShareApp.item.entity.Comment;
 import com.project.rentAndShareApp.item.entity.Item;
 import com.project.rentAndShareApp.user.entity.User;
@@ -19,10 +18,6 @@ public class CommentMapper {
                 comment.getUser().getName(),
                 comment.getCreated()
         );
-    }
-
-    public ShortCommentDto toShortCommentDto() {
-
     }
 
     public Comment toComment(CommentRequestDto commentDto, Item item, User user) {
