@@ -2,12 +2,14 @@ package com.project.rentAndShareApp.booking.entity;
 
 import com.project.rentAndShareApp.item.entity.Item;
 import com.project.rentAndShareApp.user.entity.User;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "booking")
 public class Booking {
@@ -34,14 +36,5 @@ public class Booking {
     private BookingStatus status;
 
     public Booking() {
-    }
-
-    public Booking(Long id, LocalDateTime start, LocalDateTime end, Item item, User booker, BookingStatus status) {
-        this.id = id;
-        this.start = start;
-        this.end = end;
-        this.item = item;
-        this.booker = booker;
-        this.status = status;
     }
 }

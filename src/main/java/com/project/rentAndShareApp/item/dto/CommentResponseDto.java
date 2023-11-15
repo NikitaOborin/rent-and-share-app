@@ -1,15 +1,17 @@
 package com.project.rentAndShareApp.item.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 public class CommentResponseDto {
-    Long id;
-    String text;
-    String authorName;
-    LocalDateTime created;
+    private Long id;
+    private String text;
+    private String authorName;
+    private LocalDateTime created;
 
     public CommentResponseDto(Long id, String text, String authorName, LocalDateTime created) {
         this.id = id;

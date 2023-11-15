@@ -3,10 +3,12 @@ package com.project.rentAndShareApp.booking.repository;
 import com.project.rentAndShareApp.booking.entity.Booking;
 import com.project.rentAndShareApp.booking.entity.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> getByBookerIdOrderByStartDesc(Long bookerId);
 
@@ -34,7 +36,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> getByItemOwnerIdAndStatusEqualsOrderByStartDesc(Long ownerId, BookingStatus status);
 
-    Booking getFirstByItemIdAndEndBeforeOrderByEndDesc(Long itemId, LocalDateTime currentTime);
+    Booking getFirstByItemIdAndStartBeforeAndStatusNotOrderByEndDesc(
+            Long itemId, LocalDateTime currentTime, BookingStatus status);
 
-    Booking getFirstByItemIdAndStartAfterOrderByEnd(Long itemId, LocalDateTime currentTime);
+    Booking getFirstByItemIdAndStartAfterAndStatusNotOrderByEnd(
+            Long itemId, LocalDateTime currentTime, BookingStatus status);
 }

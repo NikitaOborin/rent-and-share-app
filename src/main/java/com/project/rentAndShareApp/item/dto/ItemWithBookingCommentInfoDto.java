@@ -2,18 +2,20 @@ package com.project.rentAndShareApp.item.dto;
 
 import com.project.rentAndShareApp.booking.dto.ShortBookingDto;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Getter
+@Setter
 public class ItemWithBookingCommentInfoDto {
-    private final Long id;
-    private final String name;
-    private final String description;
-    private final Boolean available;
-    private final ShortBookingDto lastBooking;
-    private final ShortBookingDto nextBooking;
-    private final List<CommentResponseDto> comments;
+    private Long id;
+    private String name;
+    private String description;
+    private Boolean available;
+    private ShortBookingDto lastBooking;
+    private ShortBookingDto nextBooking;
+    private List<CommentResponseDto> comments;
 
     public ItemWithBookingCommentInfoDto(Long id,
                                          String name,

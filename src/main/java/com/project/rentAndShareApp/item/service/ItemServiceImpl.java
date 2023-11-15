@@ -1,6 +1,7 @@
 package com.project.rentAndShareApp.item.service;
 
 import com.project.rentAndShareApp.booking.entity.Booking;
+import com.project.rentAndShareApp.booking.entity.BookingStatus;
 import com.project.rentAndShareApp.booking.mapper.BookingMapper;
 import com.project.rentAndShareApp.booking.repository.BookingRepository;
 import com.project.rentAndShareApp.exception.CommentWithoutBookingException;
@@ -57,19 +58,19 @@ public class ItemServiceImpl implements ItemService {
         List<ItemWithBookingCommentInfoDto> itemsDtoList = new ArrayList<>();
 
         for (Item item : items) {
-            Booking lastBooking = bookingRepository.getFirstByItemIdAndEndBeforeOrderByEndDesc(
-                    item.getId(), LocalDateTime.now());
-            Booking nextBooking = bookingRepository.getFirstByItemIdAndStartAfterOrderByEnd(
-                    item.getId(), LocalDateTime.now());
+            Booking lastBooking = bookingRepository.getFirstByItemIdAndStartBeforeAndStatusNotOrderByEndDesc(
+                    item.getId(), LocalDateTime.now(), BookingStatus.REJECTED);
+            Booking nextBooking = bookingRepository.getFirstByItemIdAndStartAfterAndStatusNotOrderByEnd(
+                    item.getId(), LocalDateTime.now(), BookingStatus.REJECTED);
+
+            List<CommentResponseDto> commentDtoList = new ArrayList<>();
+            List<Comment> comments = commentRepository.findByItemId(item.getId());
+
+            for (Comment comment : comments) {
+                commentDtoList.add(commentMapper.toCommentDto(comment));
+            }
 
             if (lastBooking != null && nextBooking != null) {
-                List<CommentResponseDto> commentDtoList = new ArrayList<>();
-                List<Comment> comments = commentRepository.findByItemId(item.getId());
-
-                for (Comment comment : comments) {
-                    commentDtoList.add(commentMapper.toCommentDto(comment));
-                }
-
                 itemsDtoList.add(itemMapper.toItemWithBookingCommentInfoDto(
                         item,
                         bookingMapper.toShortBookingDto(lastBooking),
@@ -77,9 +78,25 @@ public class ItemServiceImpl implements ItemService {
                         commentDtoList
                         )
                 );
+            } else if (lastBooking != null) {
+                itemsDtoList.add(itemMapper.toItemWithBookingCommentInfoDto(
+                        item,
+                        bookingMapper.toShortBookingDto(lastBooking),
+                        null,
+                        commentDtoList
+                        )
+                );
+            } else if (nextBooking != null) {
+                itemsDtoList.add(itemMapper.toItemWithBookingCommentInfoDto(
+                        item,
+                        null,
+                        bookingMapper.toShortBookingDto(nextBooking),
+                        commentDtoList
+                        )
+                );
             } else {
                 itemsDtoList.add(itemMapper.toItemWithBookingCommentInfoDto(
-                        item, null, null, new ArrayList<>())
+                        item, null, null, commentDtoList)
                 );
             }
         }
@@ -151,17 +168,31 @@ public class ItemServiceImpl implements ItemService {
                 item, null, null, commentDtoList);
 
         if (item.getOwner().getId().equals(userId)) {
-            Booking lastBooking = bookingRepository.getFirstByItemIdAndEndBeforeOrderByEndDesc(
-                    item.getId(), LocalDateTime.now());
-            Booking nextBooking = bookingRepository.getFirstByItemIdAndStartAfterOrderByEnd(
-                    item.getId(), LocalDateTime.now());
+            Booking lastBooking = bookingRepository.getFirstByItemIdAndStartBeforeAndStatusNotOrderByEndDesc(
+                    item.getId(), LocalDateTime.now(), BookingStatus.REJECTED);
+            Booking nextBooking = bookingRepository.getFirstByItemIdAndStartAfterAndStatusNotOrderByEnd(
+                    item.getId(), LocalDateTime.now(), BookingStatus.REJECTED);
 
             if (lastBooking != null && nextBooking != null) {
                 itemDto = itemMapper.toItemWithBookingCommentInfoDto(
-                        item,
-                        bookingMapper.toShortBookingDto(lastBooking),
-                        bookingMapper.toShortBookingDto(nextBooking),
-                        commentDtoList
+                                item,
+                                bookingMapper.toShortBookingDto(lastBooking),
+                                bookingMapper.toShortBookingDto(nextBooking),
+                                commentDtoList
+                );
+            } else if (lastBooking != null) {
+                itemDto = itemMapper.toItemWithBookingCommentInfoDto(
+                                item,
+                                bookingMapper.toShortBookingDto(lastBooking),
+                                null,
+                                commentDtoList
+                );
+            } else if (nextBooking != null) {
+                itemDto = itemMapper.toItemWithBookingCommentInfoDto(
+                                item,
+                                null,
+                                bookingMapper.toShortBookingDto(nextBooking),
+                                commentDtoList
                 );
             }
         }

@@ -3,12 +3,12 @@ package com.project.rentAndShareApp.booking.controller;
 import com.project.rentAndShareApp.booking.dto.BookingRequestDto;
 import com.project.rentAndShareApp.booking.dto.BookingResponseDto;
 import com.project.rentAndShareApp.booking.service.BookingService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j

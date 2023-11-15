@@ -2,14 +2,24 @@ package com.project.rentAndShareApp.user.dto;
 
 import lombok.Getter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class UserRequestDto {
-    String name;
+    private String name;
 
     @NotNull(message = "field 'email' should not be null")
     @Email(message = "field 'email' not correct")
-    String email;
+    private String email;
+
+    public UserRequestDto() {
+    }
+
+    public UserRequestDto(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
 }

@@ -1,13 +1,15 @@
 package com.project.rentAndShareApp.item.entity;
 
 import com.project.rentAndShareApp.user.entity.User;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @Entity
-@Data
 @Table(name = "comment")
 public class Comment {
     @Id

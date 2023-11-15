@@ -4,17 +4,19 @@ import com.project.rentAndShareApp.booking.entity.BookingStatus;
 import com.project.rentAndShareApp.item.dto.ShortItemDto;
 import com.project.rentAndShareApp.user.dto.ShortUserDto;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 public class BookingResponseDto {
-    Long id;
-    LocalDateTime start;
-    LocalDateTime end;
-    BookingStatus status;
-    ShortUserDto booker;
-    ShortItemDto item;
+    private Long id;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private BookingStatus status;
+    private ShortUserDto booker;
+    private ShortItemDto item;
 
     public BookingResponseDto(Long id,
                               LocalDateTime start,

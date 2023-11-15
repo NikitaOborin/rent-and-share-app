@@ -1,11 +1,13 @@
 package com.project.rentAndShareApp.item.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class ShortItemDto {
-    Long id;
-    String name;
+    private Long id;
+    private String name;
 
     public ShortItemDto(Long id, String name) {
         this.id = id;
