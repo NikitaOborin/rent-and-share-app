@@ -1,17 +1,19 @@
 package com.project.rentAndShareApp.item.service;
 
-import com.project.rentAndShareApp.item.entity.Item;
+import com.project.rentAndShareApp.item.dto.*;
 
 import java.util.List;
 
 public interface ItemService {
-    List<Item> getListItemsForUserId(Long userId);
+    List<ItemWithBookingCommentInfoDto> getListItemsByOwnerId(Long ownerId);
 
-    Item addItem(Item item, Long userId);
+    ItemResponseDto addItem(ItemRequestDto itemDto, Long userId);
 
-    Item updateItem(Item item, Long itemId, Long userId);
+    ItemResponseDto updateItem(ItemRequestDto itemDto, Long itemId, Long userId);
 
-    Item getItemById(Long itemId);
+    ItemWithBookingCommentInfoDto getItemByIdAndUserId(Long itemId, Long userId);
 
-    List<Item> searchAvailableItemBySubstring(String substring);
+    List<ItemResponseDto> searchAvailableItemBySubstring(String substring);
+
+    CommentResponseDto addComment(CommentRequestDto commentDto, Long itemId, Long userId);
 }

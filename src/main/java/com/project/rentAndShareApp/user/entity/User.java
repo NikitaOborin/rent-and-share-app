@@ -1,18 +1,23 @@
 package com.project.rentAndShareApp.user.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
 
-@Data
+@Getter
+@Setter
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
+
     private String name;
 
-    @NotNull(message = "поле email не может быть null")
-    @Email(message = "некорректный email")
+    @Column(name = "email", unique = true)
     private String email;
 
     public User() {

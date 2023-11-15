@@ -1,18 +1,14 @@
 package com.project.rentAndShareApp.item.repository;
 
 import com.project.rentAndShareApp.item.entity.Item;
-import com.project.rentAndShareApp.user.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface ItemRepository {
-    List<Item> getListItemsForUserId(Long userId);
+@Repository
+public interface ItemRepository extends JpaRepository<Item, Long> {
+    List<Item> getItemsByOwnerId(Long ownerId);
 
-    Item addItem(Item item);
-
-    Item updateItem(Item item, Long itemId, User user);
-
-    Item getItemById(Long itemId);
-
-    List<Item> searchAvailableItemBySubstring(String substring);
+    List<Item> getByNameIgnoreCaseOrDescriptionIgnoreCaseContainingAndAvailableIsTrueOrderById(String s1, String s2);
 }
