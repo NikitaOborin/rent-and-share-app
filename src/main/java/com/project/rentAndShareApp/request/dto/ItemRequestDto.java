@@ -14,6 +14,9 @@ public class ItemRequestDto {
     private User requester;
     private LocalDateTime created;
 
+    public ItemRequestDto() {
+    }
+
     public ItemRequestDto(Long id, String description, User requester, LocalDateTime created) {
         this.id = id;
         this.description = description;
