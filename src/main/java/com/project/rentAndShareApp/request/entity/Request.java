@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "request")
-public class ItemRequest {
+public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "request_id")
@@ -26,10 +26,10 @@ public class ItemRequest {
     @Column(name = "create_time")
     private LocalDateTime created;
 
-    public ItemRequest() {
+    public Request() {
     }
 
-    public ItemRequest(Long id, String description, User requester, LocalDateTime created) {
+    public Request(Long id, String description, User requester, LocalDateTime created) {
         this.id = id;
         this.description = description;
         this.requester = requester;
