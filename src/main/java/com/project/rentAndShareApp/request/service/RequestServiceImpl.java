@@ -12,6 +12,7 @@ import com.project.rentAndShareApp.request.entity.Request;
 import com.project.rentAndShareApp.request.mapper.RequestMapper;
 import com.project.rentAndShareApp.request.repository.RequestRepository;
 import com.project.rentAndShareApp.user.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class RequestServiceImpl implements RequestService {
     private final RequestMapper requestMapper;
@@ -42,6 +44,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public RequestResponseDto addRequest(RequestRequestDto requestDto, Long userId) {
+        log.info("RequestService: addRequest(): start with userId={} and requestDto='{}'", userId, requestDto);
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("user with id=" + userId + " not found");
         }
@@ -53,11 +56,12 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<RequestWithItemInfoDto> getRequests(Long userId) {
+        log.info("RequestService: getRequests(): start with userId={}", userId);
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("user with id=" + userId + " not found");
         }
 
-        List<Request> requests = requestRepository.getByRequesterId(userId);
+        List<Request> requests = requestRepository.getByRequesterIdOrderByCreatedDesc(userId);
         List<RequestWithItemInfoDto> requestListDto = new ArrayList<>();
 
         for (Request request : requests) {
@@ -74,5 +78,53 @@ public class RequestServiceImpl implements RequestService {
 
         return requestListDto;
 
+    }
+
+    @Override
+    public List<RequestWithItemInfoDto> getAllRequests(Long userId, Integer from, Integer size) {
+        log.info("RequestService: getAllRequests(): start with userId={}, from={} and size={}", userId, from, size);
+        if (size == null) {
+            size = Integer.MAX_VALUE;
+        }
+
+        List<Request> requests = requestRepository.getByRequesterIdNotOrderByCreatedDesc(userId);
+        List<RequestWithItemInfoDto> requestListDto = new ArrayList<>();
+
+        for (Request request : requests) {
+            List<Item> items = itemRepository.getByRequestId(request.getId());
+            List<ItemWithRequestInfoDto> itemListDto = new ArrayList<>();
+
+            for (Item item : items) {
+                itemListDto.add(itemMapper.toItemWithRequestInfoDto(item));
+            }
+
+            requestListDto.add(requestMapper.toRequestWithItemInfoDto(request, itemListDto));
+
+        }
+
+        return requestListDto;
+    }
+
+    @Override
+    public RequestWithItemInfoDto getRequestById(Long requestId, Long userId) {
+        log.info("RequestService: getRequestById(): start with requestId={} and userId={}", requestId, userId);
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundException("user with id=" + userId + " not found");
+        }
+
+        if (!requestRepository.existsById(requestId)) {
+            throw new NotFoundException("request with id=" + requestId + " not found");
+        }
+
+        Request request = requestRepository.getReferenceById(requestId);
+
+        List<Item> items = itemRepository.getByRequestId(request.getId());
+        List<ItemWithRequestInfoDto> itemListDto = new ArrayList<>();
+
+        for (Item item : items) {
+            itemListDto.add(itemMapper.toItemWithRequestInfoDto(item));
+        }
+
+        return requestMapper.toRequestWithItemInfoDto(request, itemListDto);
     }
 }

@@ -10,4 +10,8 @@ public interface RequestService {
     RequestResponseDto addRequest(RequestRequestDto requestDto, Long userId);
 
     List<RequestWithItemInfoDto> getRequests(Long userId);
+
+    List<RequestWithItemInfoDto> getAllRequests(Long userId, Integer from, Integer size);
+
+    RequestWithItemInfoDto getRequestById(Long requestId, Long userId);
 }

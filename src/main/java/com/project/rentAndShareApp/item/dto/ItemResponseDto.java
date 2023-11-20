@@ -10,11 +10,13 @@ public class ItemResponseDto {
     private String name;
     private String description;
     private Boolean available;
+    private Long requestId;
 
-    public ItemResponseDto(Long id, String name, String description, Boolean available) {
+    public ItemResponseDto(Long id, String name, String description, Boolean available, Long requestId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.available = available;
+        this.requestId = requestId;
     }
 }

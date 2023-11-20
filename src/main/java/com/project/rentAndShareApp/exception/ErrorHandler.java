@@ -1,5 +1,6 @@
 package com.project.rentAndShareApp.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -141,5 +142,18 @@ public class ErrorHandler {
         );
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handle(ConstraintViolationException e) {
+        log.error("ConstraintViolationException: " + e.getMessage());
+        ErrorResponse exceptionResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "ConstraintViolationException",
+                e.getMessage()
+        );
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
