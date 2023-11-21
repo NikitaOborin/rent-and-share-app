@@ -14,6 +14,9 @@ import com.project.rentAndShareApp.request.repository.RequestRepository;
 import com.project.rentAndShareApp.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -83,11 +86,10 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<RequestWithItemInfoDto> getAllRequests(Long userId, Integer from, Integer size) {
         log.info("RequestService: getAllRequests(): start with userId={}, from={} and size={}", userId, from, size);
-        if (size == null) {
-            size = Integer.MAX_VALUE;
-        }
+        Sort sortByCreated = Sort.by(Sort.Direction.DESC, "created");
+        Pageable pageRequest = PageRequest.of(from / size, size, sortByCreated);
 
-        List<Request> requests = requestRepository.getByRequesterIdNotOrderByCreatedDesc(userId);
+        List<Request> requests = requestRepository.getByRequesterIdNot(userId, pageRequest);
         List<RequestWithItemInfoDto> requestListDto = new ArrayList<>();
 
         for (Request request : requests) {
