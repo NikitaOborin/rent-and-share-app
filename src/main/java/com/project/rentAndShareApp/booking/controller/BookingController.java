@@ -4,6 +4,8 @@ import com.project.rentAndShareApp.booking.dto.BookingRequestDto;
 import com.project.rentAndShareApp.booking.dto.BookingResponseDto;
 import com.project.rentAndShareApp.booking.service.BookingService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -48,19 +50,23 @@ public class BookingController {
     @GetMapping()
     public List<BookingResponseDto> getListBookingByBookerIdAndState(
             @RequestHeader("X-Sharer-User-Id") Long bookerId,
-            @RequestParam(required = false, defaultValue = "ALL") String state) {
+            @RequestParam(required = false, defaultValue = "ALL") String state,
+            @RequestParam(defaultValue = "0") @Min(0) Integer from,
+            @RequestParam(defaultValue = "20") @Min(1) @Max(100) Integer size) {
         log.info("BookingController: getListBookingByBookerIdAndState(): " +
                 "start with bookerId={} and state='{}'", bookerId, state);
 
-        return bookingService.getListBookingByBookerIdAndState(bookerId, state);
+        return bookingService.getListBookingByBookerIdAndState(bookerId, state, from, size);
     }
 
     @GetMapping("/owner")
     public List<BookingResponseDto> getListBookingByOwnerIdAndState(
             @RequestHeader("X-Sharer-User-Id") Long ownerId,
-            @RequestParam(required = false, defaultValue = "ALL") String state) {
+            @RequestParam(required = false, defaultValue = "ALL") String state,
+            @RequestParam(defaultValue = "0") @Min(0) Integer from,
+            @RequestParam(defaultValue = "20") @Min(1) @Max(100) Integer size) {
         log.info("BookingController: getListBookingByOwnerIdAndState(): " +
                 "start with ownerId={} and state='{}'", ownerId, state);
-        return bookingService.getListBookingByOwnerIdAndState(ownerId, state);
+        return bookingService.getListBookingByOwnerIdAndState(ownerId, state, from, size);
     }
 }

@@ -1,6 +1,6 @@
 package com.project.rentAndShareApp.item.entity;
 
-import com.project.rentAndShareApp.request.entity.ItemRequest;
+import com.project.rentAndShareApp.request.entity.Request;
 import com.project.rentAndShareApp.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class Item {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
-    private ItemRequest itemRequest;
+    private Request request;
 
     public Item() {
     }

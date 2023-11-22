@@ -18,9 +18,12 @@ public class ItemRequestDto {
     @NotNull(message = "field 'available' should not be null")
     private Boolean available;
 
-    public ItemRequestDto(String name, String description, Boolean available) {
+    private Long requestId;
+
+    public ItemRequestDto(String name, String description, Boolean available, Long requestId) {
         this.name = name;
         this.description = description;
         this.available = available;
+        this.requestId = requestId;
     }
 }
