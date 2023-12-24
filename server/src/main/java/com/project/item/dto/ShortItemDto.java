@@ -9,6 +9,9 @@ public class ShortItemDto {
     private Long id;
     private String name;
 
+    public ShortItemDto() {
+    }
+
     public ShortItemDto(Long id, String name) {
         this.id = id;
         this.name = name;

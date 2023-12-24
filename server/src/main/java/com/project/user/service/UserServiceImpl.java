@@ -43,13 +43,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto addUser(UserRequestDto userDto) {
-        log.info("UserService: addUser(): start with userDtoId='{}'", userDto);
+        log.info("UserService: addUser(): start with userDto='{}'", userDto);
         User user;
 
         try {
             user = userRepository.save(userMapper.toUser(userDto));
         } catch (DataIntegrityViolationException e) {
-            throw new UserEmailAlreadyExistException("user with email:" + userDto.getEmail() + " already exist");
+            throw new UserEmailAlreadyExistException("user with email=" + userDto.getEmail() + " already exist");
         }
 
         return userMapper.toUserDto(user);
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto updateUser(UserRequestDto userDto, Long userId) {
-        log.info("UserService: updateUser(): start with userId={} and userDto:'{}'", userId, userDto);
+        log.info("UserService: updateUser(): start with userId={} and userDto='{}'", userId, userDto);
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("user with id=" + userId + " not found");
         }
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         User existUser = userRepository.getReferenceById(userId);
 
         if (userRepository.existsUserByEmail(user.getEmail()) && !existUser.getEmail().equals(user.getEmail())) {
-            throw new UserEmailAlreadyExistException("user with email:" + user.getEmail() + " already exist");
+            throw new UserEmailAlreadyExistException("user with email=" + user.getEmail() + " already exist");
         }
 
         if (user.getName() != null) {

@@ -18,6 +18,9 @@ public class BookingResponseDto {
     private ShortUserDto booker;
     private ShortItemDto item;
 
+    public BookingResponseDto() {
+    }
+
     public BookingResponseDto(Long id,
                               LocalDateTime start,
                               LocalDateTime end,

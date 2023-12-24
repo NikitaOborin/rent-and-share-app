@@ -42,37 +42,13 @@ public class ItemMapper {
         );
     }
 
-    public ItemWithRequestInfoDto toItemWithRequestInfoDto(Item item) {
-        return new ItemWithRequestInfoDto(
-                item.getId(),
-                item.getName(),
-                item.getDescription(),
-                item.getAvailable(),
-                item.getRequest().getId()
-        );
-    }
-
     public Item toItem(ItemRequestDto itemDto, Long itemId, Long userId) {
         Item item = new Item();
-
         User owner = new User();
+
         owner.setId(userId);
 
         item.setId(itemId);
-        item.setName(itemDto.getName());
-        item.setDescription(itemDto.getDescription());
-        item.setAvailable(itemDto.getAvailable());
-        item.setOwner(owner);
-
-        return item;
-    }
-
-    public Item toItem(ItemRequestDto itemDto, Long userId) {
-        Item item = new Item();
-
-        User owner = new User();
-        owner.setId(userId);
-
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
         item.setAvailable(itemDto.getAvailable());

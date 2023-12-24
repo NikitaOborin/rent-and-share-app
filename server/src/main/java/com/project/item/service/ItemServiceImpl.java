@@ -53,8 +53,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemWithBookingCommentInfoDto> getListItemsByOwnerId(Long ownerId) {
-        log.info("ItemService: getListItemsForUserId(): start with userId={}", ownerId);
-        List<Item> items = itemRepository.getItemsByOwnerId(ownerId);
+        log.info("ItemService: getListItemsForUserId(): start with ownerId={}", ownerId);
+        List<Item> items = itemRepository.getItemsByOwnerIdOrderById(ownerId);
         List<ItemWithBookingCommentInfoDto> itemsDtoList = new ArrayList<>();
 
         for (Item item : items) {
@@ -63,8 +63,8 @@ public class ItemServiceImpl implements ItemService {
             Booking nextBooking = bookingRepository.getFirstByItemIdAndStartAfterAndStatusNotOrderByEnd(
                     item.getId(), LocalDateTime.now(), BookingStatus.REJECTED);
 
-            List<CommentResponseDto> commentDtoList = new ArrayList<>();
             List<Comment> comments = commentRepository.findByItemId(item.getId());
+            List<CommentResponseDto> commentDtoList = new ArrayList<>();
 
             for (Comment comment : comments) {
                 commentDtoList.add(commentMapper.toCommentDto(comment));
@@ -105,32 +105,31 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemResponseDto addItem(ItemRequestDto itemDto, Long userId) {
-        log.info("ItemService: addItem(): start with userId = {} and itemDto: '{}'", userId, itemDto);
-        Item item = itemMapper.toItem(itemDto, userId);
-
-        if (!userRepository.existsById(userId)) {
-            throw new NotFoundException("user with id=" + userId + " not found");
+    public ItemResponseDto addItem(ItemRequestDto itemDto, Long ownerId) {
+        log.info("ItemService: addItem(): start with ownerId={} and itemDto='{}'", ownerId, itemDto);
+        if (!userRepository.existsById(ownerId)) {
+            throw new NotFoundException("user with id=" + ownerId + " not found");
         }
 
-        item.setOwner(userRepository.getReferenceById(userId));
+        Item item = itemMapper.toItem(itemDto, null, ownerId);
+
+        item.setOwner(userRepository.getReferenceById(ownerId));
 
         return itemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
-    public ItemResponseDto updateItem(ItemRequestDto itemDto, Long itemId, Long userId) {
-        log.info("ItemService: updateItem(): start with userId = {} and itemId = {}", userId, itemId);
-        Item item = itemMapper.toItem(itemDto, itemId, userId);
-
+    public ItemResponseDto updateItem(ItemRequestDto itemDto, Long itemId, Long ownerId) {
+        log.info("ItemService: updateItem(): start with ownerId={} and itemId={}", ownerId, itemId);
         if (!itemRepository.existsById(itemId)) {
             throw new NotFoundException("item with id=" + itemId + " not found");
         }
 
+        Item item = itemMapper.toItem(itemDto, itemId, ownerId);
         Item existItem = itemRepository.getReferenceById(itemId);
 
-        if (!existItem.getOwner().getId().equals(userId)) {
-            throw new NotFoundException("user with id=" + userId + "not owner for item with id=" + itemId);
+        if (!existItem.getOwner().getId().equals(ownerId)) {
+            throw new NotFoundException("user with id=" + ownerId + "not owner for item with id=" + itemId);
         }
 
         if (item.getName() != null) {
@@ -149,16 +148,16 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemWithBookingCommentInfoDto getItemByIdAndUserId(Long itemId, Long userId) {
-        log.info("ItemService: getItemById(): start with itemId = {} and userId={}", itemId, userId);
+    public ItemWithBookingCommentInfoDto getItemById(Long itemId, Long userId) {
+        log.info("ItemService: getItemById(): start with itemId={} and userId={}", itemId, userId);
         if (!itemRepository.existsById(itemId)) {
             throw new NotFoundException("item with id=" + itemId + " not found");
         }
 
         Item item = itemRepository.getReferenceById(itemId);
 
-        List<CommentResponseDto> commentDtoList = new ArrayList<>();
         List<Comment> comments = commentRepository.findByItemId(itemId);
+        List<CommentResponseDto> commentDtoList = new ArrayList<>();
 
         for (Comment comment : comments) {
             commentDtoList.add(commentMapper.toCommentDto(comment));
@@ -201,15 +200,16 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemResponseDto> searchAvailableItemBySubstring(String substring) {
-        log.info("ItemService: getItemById(): start with substring = '{}'", substring);
-        List<Item> items = new ArrayList<>();
+    public List<ItemResponseDto> searchAvailableItemsBySubstring(String substring) {
+        log.info("ItemService: searchAvailableItemsBySubstring(): start with substring='{}'", substring);
+        if (substring.isBlank()) {
+            return new ArrayList<>();
+        }
+
         List<ItemResponseDto> itemDtoList = new ArrayList<>();
         String s = substring.toUpperCase();
-
-        if (!substring.isBlank()) {
-            items = itemRepository.getByNameIgnoreCaseOrDescriptionIgnoreCaseContainingAndAvailableIsTrueOrderById(s, s);
-        }
+        List<Item> items = itemRepository.
+                getByNameIgnoreCaseOrDescriptionIgnoreCaseContainingAndAvailableIsTrueOrderById(s, s);
 
         for (Item item : items) {
             itemDtoList.add(itemMapper.toItemDto(item));

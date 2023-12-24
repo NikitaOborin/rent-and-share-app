@@ -1,7 +1,7 @@
 package com.project.request.service;
 
 import com.project.exception.NotFoundException;
-import com.project.item.dto.ItemWithRequestInfoDto;
+import com.project.item.dto.ItemResponseDto;
 import com.project.item.entity.Item;
 import com.project.item.mapper.ItemMapper;
 import com.project.item.repository.ItemRepository;
@@ -69,10 +69,10 @@ public class RequestServiceImpl implements RequestService {
 
         for (Request request : requests) {
             List<Item> items = itemRepository.getByRequestId(request.getId());
-            List<ItemWithRequestInfoDto> itemListDto = new ArrayList<>();
+            List<ItemResponseDto> itemListDto = new ArrayList<>();
 
             for (Item item : items) {
-                itemListDto.add(itemMapper.toItemWithRequestInfoDto(item));
+                itemListDto.add(itemMapper.toItemDto(item));
             }
 
             requestListDto.add(requestMapper.toRequestWithItemInfoDto(request, itemListDto));
@@ -94,10 +94,10 @@ public class RequestServiceImpl implements RequestService {
 
         for (Request request : requests) {
             List<Item> items = itemRepository.getByRequestId(request.getId());
-            List<ItemWithRequestInfoDto> itemListDto = new ArrayList<>();
+            List<ItemResponseDto> itemListDto = new ArrayList<>();
 
             for (Item item : items) {
-                itemListDto.add(itemMapper.toItemWithRequestInfoDto(item));
+                itemListDto.add(itemMapper.toItemDto(item));
             }
 
             requestListDto.add(requestMapper.toRequestWithItemInfoDto(request, itemListDto));
@@ -121,10 +121,10 @@ public class RequestServiceImpl implements RequestService {
         Request request = requestRepository.getReferenceById(requestId);
 
         List<Item> items = itemRepository.getByRequestId(request.getId());
-        List<ItemWithRequestInfoDto> itemListDto = new ArrayList<>();
+        List<ItemResponseDto> itemListDto = new ArrayList<>();
 
         for (Item item : items) {
-            itemListDto.add(itemMapper.toItemWithRequestInfoDto(item));
+            itemListDto.add(itemMapper.toItemDto(item));
         }
 
         return requestMapper.toRequestWithItemInfoDto(request, itemListDto);

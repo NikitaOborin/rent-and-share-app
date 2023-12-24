@@ -1,6 +1,6 @@
 package com.project.request.mapper;
 
-import com.project.item.dto.ItemWithRequestInfoDto;
+import com.project.item.dto.ItemResponseDto;
 import com.project.request.dto.RequestRequestDto;
 import com.project.request.dto.RequestResponseDto;
 import com.project.request.dto.RequestWithItemInfoDto;
@@ -21,7 +21,7 @@ public class RequestMapper {
         );
     }
 
-    public RequestWithItemInfoDto toRequestWithItemInfoDto(Request request, List<ItemWithRequestInfoDto> itemsDto) {
+    public RequestWithItemInfoDto toRequestWithItemInfoDto(Request request, List<ItemResponseDto> itemsDto) {
         return new RequestWithItemInfoDto(
                 request.getId(),
                 request.getDescription(),

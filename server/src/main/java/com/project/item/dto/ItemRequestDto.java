@@ -20,6 +20,9 @@ public class ItemRequestDto {
 
     private Long requestId;
 
+    public ItemRequestDto() {
+    }
+
     public ItemRequestDto(String name, String description, Boolean available, Long requestId) {
         this.name = name;
         this.description = description;

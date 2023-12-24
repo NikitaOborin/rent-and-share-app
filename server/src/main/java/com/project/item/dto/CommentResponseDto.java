@@ -13,6 +13,9 @@ public class CommentResponseDto {
     private String authorName;
     private LocalDateTime created;
 
+    public CommentResponseDto() {
+    }
+
     public CommentResponseDto(Long id, String text, String authorName, LocalDateTime created) {
         this.id = id;
         this.text = text;

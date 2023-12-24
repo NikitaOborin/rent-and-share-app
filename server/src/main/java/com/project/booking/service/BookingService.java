@@ -6,9 +6,9 @@ import com.project.booking.dto.BookingResponseDto;
 import java.util.List;
 
 public interface BookingService {
-    BookingResponseDto addBooking(BookingRequestDto bookingDto, Long userId);
+    BookingResponseDto addBooking(BookingRequestDto bookingDto, Long bookerId);
 
-    BookingResponseDto approveBookingByUserId(Long bookingId, Boolean approve, Long userId);
+    BookingResponseDto approveBookingByOwnerId(Long bookingId, Boolean approve, Long ownerId);
 
     BookingResponseDto getBookingById(Long bookingId, Long userId);
 

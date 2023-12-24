@@ -8,6 +8,9 @@ import lombok.Setter;
 public class ShortUserDto {
     private Long id;
 
+    public ShortUserDto() {
+    }
+
     public ShortUserDto(Long id) {
         this.id = id;
     }

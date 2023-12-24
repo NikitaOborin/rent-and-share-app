@@ -12,6 +12,9 @@ public class ItemResponseDto {
     private Boolean available;
     private Long requestId;
 
+    public ItemResponseDto() {
+    }
+
     public ItemResponseDto(Long id, String name, String description, Boolean available, Long requestId) {
         this.id = id;
         this.name = name;

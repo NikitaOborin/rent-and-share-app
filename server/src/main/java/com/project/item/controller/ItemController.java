@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/items")
+@RequestMapping("items")
 public class ItemController {
     private final ItemService itemService;
 
@@ -22,42 +22,41 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<ItemWithBookingCommentInfoDto> getListItemsByOwnerId(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
         log.info("ItemController: getListItemsForUserId(): start with ownerId={}", ownerId);
         return itemService.getListItemsByOwnerId(ownerId);
     }
 
-    @PostMapping()
+    @PostMapping
     public ItemResponseDto addItem(@RequestBody @Valid ItemRequestDto itemDto,
-                                   @RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("ItemController: addItem(): start with userId = {} and itemDto: '{}'", userId, itemDto);
-        return itemService.addItem(itemDto, userId);
+                                   @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        log.info("ItemController: addItem(): start with ownerId={} and itemDto='{}'", ownerId, itemDto);
+        return itemService.addItem(itemDto, ownerId);
     }
 
-    @PatchMapping("/{itemId}")
+    @PatchMapping("{itemId}")
     public ItemResponseDto updateItem(@RequestBody ItemRequestDto itemDto,
                                       @PathVariable Long itemId,
-                                      @RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("ItemController: updateItem(): start with userId = {} and itemId = {}", userId, itemId);
-        return itemService.updateItem(itemDto, itemId, userId);
+                                      @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        log.info("ItemController: updateItem(): start with ownerId={} and itemId={}", ownerId, itemId);
+        return itemService.updateItem(itemDto, itemId, ownerId);
     }
 
-    @GetMapping("/{itemId}")
+    @GetMapping("{itemId}")
     public ItemWithBookingCommentInfoDto getItemById(@PathVariable Long itemId,
-                                                     @RequestHeader(value = "X-Sharer-User-Id", required = false)
-                                                     Long userId) {
-        log.info("ItemController: getItemById(): start with itemId = {} and with userId={}", itemId, userId);
-        return itemService.getItemByIdAndUserId(itemId, userId);
+                                                     @RequestHeader("X-Sharer-User-Id") Long userId) {
+        log.info("ItemController: getItemById(): start with itemId={} and with userId={}", itemId, userId);
+        return itemService.getItemById(itemId, userId);
     }
 
-    @GetMapping("/search")
-    public List<ItemResponseDto> searchAvailableItemBySubstring(@RequestParam String text) {
-        log.info("ItemController: getItemById(): start with substring = '{}'", text);
-        return itemService.searchAvailableItemBySubstring(text);
+    @GetMapping("search")
+    public List<ItemResponseDto> searchAvailableItemsBySubstring(@RequestParam String text) {
+        log.info("ItemController: searchAvailableItemsBySubstring(): start with substring='{}'", text);
+        return itemService.searchAvailableItemsBySubstring(text);
     }
 
-    @PostMapping("/{itemId}/comment")
+    @PostMapping("{itemId}/comment")
     public CommentResponseDto addComment(@RequestBody @Valid CommentRequestDto commentDto,
                                          @PathVariable Long itemId,
                                          @RequestHeader("X-Sharer-User-Id") Long userId) {

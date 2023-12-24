@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/requests")
+@RequestMapping("requests")
 public class RequestController {
     private final RequestService requestService;
 
@@ -39,7 +39,7 @@ public class RequestController {
         return requestService.getRequests(userId);
     }
 
-    @GetMapping("/all")
+    @GetMapping("all")
     public List<RequestWithItemInfoDto> getAllRequests(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                        @RequestParam(defaultValue = "0") @Min(0) Integer from,
                                                        @RequestParam(defaultValue = "20") @Min(1) @Max(100) Integer size) {
@@ -47,7 +47,7 @@ public class RequestController {
         return requestService.getAllRequests(userId, from, size);
     }
 
-    @GetMapping("/{requestId}")
+    @GetMapping("{requestId}")
     public RequestWithItemInfoDto getRequestById(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                  @PathVariable Long requestId) {
         log.info("RequestController: getRequestById(): start with requestId={} and userId={}", requestId, userId);

@@ -17,6 +17,9 @@ public class ItemWithBookingCommentInfoDto {
     private ShortBookingDto nextBooking;
     private List<CommentResponseDto> comments;
 
+    public ItemWithBookingCommentInfoDto() {
+    }
+
     public ItemWithBookingCommentInfoDto(Long id,
                                          String name,
                                          String description,

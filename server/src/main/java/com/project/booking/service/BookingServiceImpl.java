@@ -44,14 +44,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponseDto addBooking(BookingRequestDto bookingDto, Long userId) {
-        log.info("BookingService: addBooking(): start with bookerId={} and bookingDto='{}'", userId, bookingDto);
-        Booking booking = bookingMapper.toBooking(bookingDto, userId);
+    public BookingResponseDto addBooking(BookingRequestDto bookingDto, Long bookerId) {
+        log.info("BookingService: addBooking(): start with bookerId={} and bookingDto='{}'", bookerId, bookingDto);
+        Long itemId = bookingDto.getItemId();
 
-        Long bookerId = booking.getBooker().getId();
-        Long itemId = booking.getItem().getId();
-
-        if (isNotValidStartEndTime(booking)) {
+        if (isNotValidStartEndTime(bookingDto)) {
             throw new BookingStartEndTimeNotValidException("booking start/end time not valid");
         }
 
@@ -63,6 +60,7 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFoundException("item with id=" + itemId + " not found");
         }
 
+        Booking booking = bookingMapper.toBooking(bookingDto, bookerId);
         User booker = userRepository.getReferenceById(bookerId);
         Item item = itemRepository.getReferenceById(itemId);
 
@@ -82,8 +80,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponseDto approveBookingByUserId(Long bookingId, Boolean approve, Long ownerId) {
-        log.info("BookingService: approveBookingByUserId(): start with bookingId={} " +
+    public BookingResponseDto approveBookingByOwnerId(Long bookingId, Boolean approve, Long ownerId) {
+        log.info("BookingService: approveBookingByOwnerId(): start with bookingId={} " +
                 "and ownerId={}", bookingId, ownerId);
         if (!bookingRepository.existsById(bookingId)) {
             throw new NotFoundException("booking with id=" + bookingId + " not found");
@@ -134,17 +132,18 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getListBookingByBookerIdAndState(Long bookerId, String stateString, Integer from, Integer size) {
+    public List<BookingResponseDto> getListBookingByBookerIdAndState(Long bookerId, String stateString,
+                                                                     Integer from, Integer size) {
         log.info("BookingService: getListBookingByBookerIdAndState(): start with bookerId={} " +
                 "and state='{}'", bookerId, stateString);
+        if (!userRepository.existsById(bookerId)) {
+            throw new NotFoundException("booker with id=" + bookerId + " not found");
+        }
+
         Pageable pageRequest = PageRequest.of(from / size, size);
         BookingCurrentState state = BookingCurrentState.from(stateString);
         List<Booking> bookings = new ArrayList<>();
         List<BookingResponseDto> bookingDtoList = new ArrayList<>();
-
-        if (!userRepository.existsById(bookerId)) {
-            throw new NotFoundException("booker with id=" + bookerId + " not found");
-        }
 
         switch (state) {
             case ALL:
@@ -186,7 +185,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getListBookingByOwnerIdAndState(Long ownerId, String stateString, Integer from, Integer size) {
+    public List<BookingResponseDto> getListBookingByOwnerIdAndState(Long ownerId, String stateString,
+                                                                    Integer from, Integer size) {
         log.info("BookingService: getListBookingByOwnerIdAndState(): start with ownerId={} " +
                 "and state='{}'", ownerId, stateString);
         Pageable pageRequest = PageRequest.of(from / size, size);
@@ -236,9 +236,9 @@ public class BookingServiceImpl implements BookingService {
         return bookingDtoList;
     }
 
-    private boolean isNotValidStartEndTime(Booking booking) {
-        LocalDateTime start = booking.getStart();
-        LocalDateTime end = booking.getEnd();
+    private boolean isNotValidStartEndTime(BookingRequestDto bookingDto) {
+        LocalDateTime start = bookingDto.getStart();
+        LocalDateTime end = bookingDto.getEnd();
 
         return start.equals(end) || end.isBefore(start);
     }
